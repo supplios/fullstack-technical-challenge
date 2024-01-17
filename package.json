@@ -1,0 +1,30 @@
+{
+  "name": "supplios",
+  "version": "1.0.0",
+  "description": "",
+  "workspaces": [
+    "apps/*"
+  ],
+  "keywords": [
+    "nest",
+    "next",
+    "turborepo"
+  ],
+  "author": "Rasoul Shahriary",
+  "packageManager": "npm@9.6.3",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^8.47.0",
+    "prettier": "^3.0.2",
+    "tsconfig": "*"
+  },
+  "scripts": {
+    "build": "turbo run build:all",
+    "dev": "concurrently -c blue,green pnpm:frontend pnpm:backend",
+    "backend": "cd ./backend && npm run dev",
+    "frontend": "cd ./frontend && npm run dev"
+  },
+  "license": "ISC",
+  "dependencies": {
+  }
+}
