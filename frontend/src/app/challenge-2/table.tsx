@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { FC, useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -10,10 +10,15 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
-import { SelectComponent } from "./select-component";
+import { CarFiltersOptionsDto } from "@/api-types";
+import { CarFilters } from "./car-filters";
 
-export const MyTable = () => {
-  const topContent = React.useMemo(() => {
+interface MyTableProps {
+  filterOptions: CarFiltersOptionsDto;
+}
+
+export const MyTable: FC<MyTableProps> = ({ filterOptions }) => {
+  const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-3">
         <div className="flex justify-between gap-3 items-end">
@@ -32,9 +37,9 @@ export const MyTable = () => {
             // onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
-            <SelectComponent />
-            <SelectComponent />
-            <SelectComponent />
+            <CarFilters label="Brand" items={filterOptions.brands} />
+            <CarFilters label="Price" items={filterOptions.prices} />
+            <CarFilters label="Color" items={filterOptions.colors} />
           </div>
         </div>
         <div className="flex justify-between items-center">
@@ -53,7 +58,7 @@ export const MyTable = () => {
         </div>
       </div>
     );
-  }, []);
+  }, [filterOptions.brands, filterOptions.colors, filterOptions.prices]);
 
   return (
     <Table
