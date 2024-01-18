@@ -10,39 +10,25 @@ import {
   Button,
   Input,
 } from "@nextui-org/react";
-import { CarFiltersOptionsDto } from "@/api-types";
+import { CarFiltersOptionsDto, CarsDto } from "@/api-types";
 import { CarFilters } from "./car-filters";
+import { capitalize } from "@/utils";
 
 interface MyTableProps {
   filterOptions: CarFiltersOptionsDto;
+  cars: CarsDto[];
 }
 
-export const MyTable: FC<MyTableProps> = ({ filterOptions }) => {
+export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-3">
         <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            classNames={{
-              base: "w-full sm:max-w-[44%]",
-              inputWrapper: "border-1",
-            }}
-            placeholder="Search by name..."
-            size="sm"
-            // startContent={<SearchIcon className="text-default-300" />}
-            // value={filterValue}
-            variant="bordered"
-            // onClear={() => setFilterValue("")}
-            // onValueChange={onSearchChange}
-          />
-          <div className="flex gap-3">
-            <CarFilters label="Brand" items={filterOptions.brands} />
-            <CarFilters label="Price" items={filterOptions.prices} />
-            <CarFilters label="Color" items={filterOptions.colors} />
-          </div>
+          <CarFilters label="brand" items={filterOptions.brands} />
+          <CarFilters label="price" items={filterOptions.prices} />
+          <CarFilters label="color" items={filterOptions.colors} />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex flex-wrap -mb-4 -mx-2">
           <span className="text-default-400 text-small">Total 30 users</span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -67,31 +53,28 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions }) => {
       topContent={topContent}
     >
       <TableHeader>
-        <TableColumn>NAME</TableColumn>
-        <TableColumn>ROLE</TableColumn>
-        <TableColumn>STATUS</TableColumn>
+        <TableColumn>Brand</TableColumn>
+        <TableColumn>Model</TableColumn>
+        <TableColumn>Year</TableColumn>
+        <TableColumn>Color</TableColumn>
+        <TableColumn>Mileage</TableColumn>
+        <TableColumn>Country</TableColumn>
+        <TableColumn>State</TableColumn>
       </TableHeader>
       <TableBody>
-        <TableRow key="1">
-          <TableCell>Tony Reichert</TableCell>
-          <TableCell>CEO</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="2">
-          <TableCell>Zoey Lang</TableCell>
-          <TableCell>Technical Lead</TableCell>
-          <TableCell>Paused</TableCell>
-        </TableRow>
-        <TableRow key="3">
-          <TableCell>Jane Fisher</TableCell>
-          <TableCell>Senior Developer</TableCell>
-          <TableCell>Active</TableCell>
-        </TableRow>
-        <TableRow key="4">
-          <TableCell>William Howard</TableCell>
-          <TableCell>Community Manager</TableCell>
-          <TableCell>Vacation</TableCell>
-        </TableRow>
+        {cars.map(
+          ({ id, brand, model, year, color, mileage, country, state }) => (
+            <TableRow key={id}>
+              <TableCell>{capitalize(brand)}</TableCell>
+              <TableCell>{capitalize(model)}</TableCell>
+              <TableCell>{year}</TableCell>
+              <TableCell>{capitalize(color)}</TableCell>
+              <TableCell>{mileage}</TableCell>
+              <TableCell>{country}</TableCell>
+              <TableCell>{capitalize(state)}</TableCell>
+            </TableRow>
+          )
+        )}
       </TableBody>
     </Table>
   );

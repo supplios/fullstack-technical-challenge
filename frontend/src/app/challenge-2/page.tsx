@@ -14,14 +14,44 @@ async function getData() {
   }
 }
 
-export default async function App() {
+async function getResult(searchParams: {
+  price: string;
+  color: string;
+  brand: string;
+}) {
+  try {
+    const res = await carsApi.findCars(
+      Number(searchParams.price),
+      searchParams.color,
+      searchParams.brand
+    );
+    return res.data;
+  } catch (err) {
+    throw new Error("Failed to fetch data");
+  }
+}
+
+export default async function App({
+  searchParams,
+}: {
+  searchParams: {
+    price: string;
+    color: string;
+    brand: string;
+  };
+}) {
+  const color = searchParams?.color;
+  const price = searchParams?.price;
+  const brand = searchParams?.brand;
+
   // const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
   //   new Set(INITIAL_VISIBLE_COLUMNS)
   // );
 
   const pages = 10;
   const data = await getData();
-  console.log(data);
+
+  const cars = await getResult({ price, color, brand });
 
   // const hasSearchFilter = Boolean(filterValue);
 
@@ -33,5 +63,5 @@ export default async function App() {
   //   );
   // }, [visibleColumns]);
 
-  return <MyTable filterOptions={data} />;
+  return <MyTable filterOptions={data} cars={cars || []} />;
 }

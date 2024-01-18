@@ -13,11 +13,14 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.15.4",
     "@nextui-org/react": "^2.2.9",
+    "@nextui-org/use-infinite-scroll": "^2.1.2",
     "axios": "^1.6.5",
     "framer-motion": "^10.18.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
+    "react-select": "^5.8.0",
+    "react-window": "^1.8.10",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {
