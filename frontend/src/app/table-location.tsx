@@ -11,18 +11,15 @@ import {
   Button,
   Chip,
 } from "@nextui-org/react";
-import { CarFiltersOptionsDto, CarPaginationResult } from "@/api-types";
-import { CarFilters } from "./car-filters";
+import { CarFiltersOptionsDto, CarGroupedByLocationResult } from "@/api-types";
 import { capitalize } from "@/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { CarFilterPrice } from "./car-filters -price";
 
 interface MyTableProps {
-  filterOptions: CarFiltersOptionsDto;
-  cars: CarPaginationResult;
+  cars: CarGroupedByLocationResult;
 }
 
-export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
+export const TableLocation: FC<MyTableProps> = ({ cars }) => {
   const [page, setPage] = React.useState(1);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
@@ -59,20 +56,6 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
   const topContent = useMemo(() => {
     return (
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between gap-16">
-          <div className="">
-            <CarFilters label="brands" items={filterOptions.brands} />
-          </div>
-          <div className="">
-            <CarFilters label="colors" items={filterOptions.colors} />
-          </div>
-          <div className="">
-            <CarFilterPrice label="priceFrom" items={filterOptions.prices} />
-          </div>
-          <div className="">
-            <CarFilterPrice label="priceTo" items={filterOptions.prices} />
-          </div>
-        </div>
         <div className="flex flex-wrap -mb-4 -mx-2 justify-around">
           <span className="text-default-400 text-small">
             Total {cars.total} cars
@@ -91,13 +74,7 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
         </div>
       </div>
     );
-  }, [
-    cars.total,
-    filterOptions.brands,
-    filterOptions.colors,
-    filterOptions.prices,
-    onRowsPerPageChange,
-  ]);
+  }, [cars.total, onRowsPerPageChange]);
 
   const bottomContent = React.useMemo(() => {
     return (
@@ -142,47 +119,29 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
       topContentPlacement="outside"
     >
       <TableHeader>
-        <TableColumn>ID</TableColumn>
-        <TableColumn>Brand</TableColumn>
-        <TableColumn>Model</TableColumn>
-        <TableColumn>Year</TableColumn>
-        <TableColumn>Price</TableColumn>
-        <TableColumn>Color</TableColumn>
-        <TableColumn>Mileage</TableColumn>
-        <TableColumn>Vehicle Identification Number</TableColumn>
-        <TableColumn>Lot number</TableColumn>
-        <TableColumn>Country</TableColumn>
         <TableColumn>State</TableColumn>
-        <TableColumn>Status</TableColumn>
-        <TableColumn>Condition</TableColumn>
+        <TableColumn>Country</TableColumn>
+        <TableColumn>Number of cars</TableColumn>
+        <TableColumn>
+          <span />
+        </TableColumn>
       </TableHeader>
       <TableBody>
         {cars.data.map((item) => (
-          <TableRow key={item.id}>
-            <TableCell>{item.id}</TableCell>
-            <TableCell>{capitalize(item.brand)}</TableCell>
-            <TableCell>{capitalize(item.model)}</TableCell>
-            <TableCell>{item.year}</TableCell>
-            <TableCell>{item.price}</TableCell>
-            <TableCell>{capitalize(item.color)}</TableCell>
-            <TableCell>{item.mileage}</TableCell>
-            <TableCell>{item.vin}</TableCell>
-            <TableCell>{item.lot}</TableCell>
+          <TableRow key={item.state}>
             <TableCell>{capitalize(item.country)}</TableCell>
             <TableCell>{capitalize(item.state)}</TableCell>
             <TableCell>
-              <Chip
-                color={
-                  item.title_status === "salvage insurance"
-                    ? "warning"
-                    : "success"
-                }
-                variant="flat"
-              >
-                {capitalize(item.title_status)}
+              <Chip variant="flat" color="success" radius="sm" size="sm">
+                {item.count}
               </Chip>
             </TableCell>
-            <TableCell>{item.condition}</TableCell>
+
+            <TableCell>
+              <Button size="sm" variant="flat">
+                Show Vehicles
+              </Button>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

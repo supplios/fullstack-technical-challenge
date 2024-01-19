@@ -136,6 +136,74 @@ export interface CarFiltersOptionsDto {
 /**
  * 
  * @export
+ * @interface CarGroupedByLocationDto
+ */
+export interface CarGroupedByLocationDto {
+    /**
+     * The state where the car is located
+     * @type {string}
+     * @memberof CarGroupedByLocationDto
+     */
+    'state': string;
+    /**
+     * The country where the car is located
+     * @type {string}
+     * @memberof CarGroupedByLocationDto
+     */
+    'country': string;
+    /**
+     * Array of car IDs
+     * @type {Array<number>}
+     * @memberof CarGroupedByLocationDto
+     */
+    'ids': Array<number>;
+    /**
+     * Count of cars in the each group
+     * @type {number}
+     * @memberof CarGroupedByLocationDto
+     */
+    'count': number;
+}
+/**
+ * 
+ * @export
+ * @interface CarGroupedByLocationResult
+ */
+export interface CarGroupedByLocationResult {
+    /**
+     * Array of cars grouped by location
+     * @type {Array<CarGroupedByLocationDto>}
+     * @memberof CarGroupedByLocationResult
+     */
+    'data': Array<CarGroupedByLocationDto>;
+    /**
+     * Total number of items
+     * @type {number}
+     * @memberof CarGroupedByLocationResult
+     */
+    'total': number;
+    /**
+     * Total number of pages
+     * @type {number}
+     * @memberof CarGroupedByLocationResult
+     */
+    'totalPages': number;
+    /**
+     * Current page number
+     * @type {number}
+     * @memberof CarGroupedByLocationResult
+     */
+    'page': number;
+    /**
+     * Number of items per page
+     * @type {number}
+     * @memberof CarGroupedByLocationResult
+     */
+    'perPage': number;
+}
+/**
+ * 
+ * @export
  * @interface CarPaginationResult
  */
 export interface CarPaginationResult {
@@ -352,6 +420,45 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCarsGroupedByLocation: async (perPage?: number, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/cars/group/location`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (perPage !== undefined) {
+                localVarQueryParameter['perPage'] = perPage;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {boolean} [isPrice] 
          * @param {boolean} [isColor] 
          * @param {boolean} [isBrand] 
@@ -435,6 +542,19 @@ export const CarsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findCarsGroupedByLocation(perPage?: number, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CarGroupedByLocationResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findCarsGroupedByLocation(perPage, page, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['CarsApi.findCarsGroupedByLocation']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
          * @param {boolean} [isPrice] 
          * @param {boolean} [isColor] 
          * @param {boolean} [isBrand] 
@@ -482,6 +602,16 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCarsGroupedByLocation(perPage?: number, page?: number, options?: any): AxiosPromise<CarGroupedByLocationResult> {
+            return localVarFp.findCarsGroupedByLocation(perPage, page, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {boolean} [isPrice] 
          * @param {boolean} [isColor] 
          * @param {boolean} [isBrand] 
@@ -526,6 +656,18 @@ export class CarsApi extends BaseAPI {
      */
     public findCars(priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options?: RawAxiosRequestConfig) {
         return CarsApiFp(this.configuration).findCars(priceFrom, priceTo, colors, brands, perPage, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [perPage] Number of results in each page or request
+     * @param {number} [page] Number of the page
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CarsApi
+     */
+    public findCarsGroupedByLocation(perPage?: number, page?: number, options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).findCarsGroupedByLocation(perPage, page, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
