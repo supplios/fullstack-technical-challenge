@@ -1,17 +1,14 @@
 "use client";
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import {
-  Table,
-  TableHeader,
-  TableColumn,
-  TableBody,
-  TableRow,
-  TableCell,
   Pagination,
   Button,
-  Chip,
+  Card,
+  CardBody,
+  Image,
+  CardHeader,
 } from "@nextui-org/react";
-import { CarFiltersOptionsDto, CarGroupedByLocationResult } from "@/api-types";
+import { CarGroupedByLocationResult } from "@/api-types";
 import { capitalize } from "@/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -22,7 +19,7 @@ interface MyTableProps {
 export const TableLocation: FC<MyTableProps> = ({ cars }) => {
   const [page, setPage] = React.useState(1);
   const searchParams = useSearchParams();
-  const { replace } = useRouter();
+  const { replace, push } = useRouter();
   const pathname = usePathname();
 
   const onRowsPerPageChange = useCallback(
@@ -45,7 +42,6 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      console.log("handleClick");
       const params = new URLSearchParams(searchParams);
       params.set("page", newPage.toString());
       replace(`${pathname}?${params.toString()}`);
@@ -76,9 +72,44 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
     );
   }, [cars.total, onRowsPerPageChange]);
 
-  const bottomContent = React.useMemo(() => {
-    return (
-      <div className="py-2 px-2 flex justify-between items-center">
+  return (
+    <div className="flex gap-4 py-2 px-2 flex-col">
+      <div className="flex gap-4 items-center">
+        {cars.data.map((item, index) => (
+          <Card
+            shadow="sm"
+            className="py-4"
+            key={item.state}
+            isPressable
+            onPress={() => {
+              const params = new URLSearchParams(searchParams);
+              params.delete("ids");
+
+              if (Array.isArray(item.ids)) {
+                item.ids.forEach((id) => {
+                  params.append("ids", id.toString());
+                });
+              }
+              push(`/cars/details?${params.toString()}`);
+            }}
+          >
+            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
+              <p className="text-tiny uppercase font-bold">{item.state}</p>
+              <small className="text-default-500">{item.country}</small>
+              <h4 className="font-bold text-large">{item.count}</h4>
+            </CardHeader>
+            <CardBody className="overflow-visible py-2">
+              <Image
+                alt="Card background"
+                className="object-cover rounded-xl"
+                src="/assets/flags/US.svg"
+                width={270}
+              />
+            </CardBody>
+          </Card>
+        ))}
+      </div>
+      <div className="flex justify-between items-center">
         <span className="w-[30%] text-small text-default-400"></span>
         <Pagination
           showControls
@@ -107,44 +138,6 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
           </Button>
         </div>
       </div>
-    );
-  }, [page, cars.totalPages, handlePageChange]);
-
-  return (
-    <Table
-      isStriped
-      aria-label="Example static collection table"
-      topContent={topContent}
-      bottomContent={bottomContent}
-      topContentPlacement="outside"
-    >
-      <TableHeader>
-        <TableColumn>State</TableColumn>
-        <TableColumn>Country</TableColumn>
-        <TableColumn>Number of cars</TableColumn>
-        <TableColumn>
-          <span />
-        </TableColumn>
-      </TableHeader>
-      <TableBody>
-        {cars.data.map((item) => (
-          <TableRow key={item.state}>
-            <TableCell>{capitalize(item.country)}</TableCell>
-            <TableCell>{capitalize(item.state)}</TableCell>
-            <TableCell>
-              <Chip variant="flat" color="success" radius="sm" size="sm">
-                {item.count}
-              </Chip>
-            </TableCell>
-
-            <TableCell>
-              <Button size="sm" variant="flat">
-                Show Vehicles
-              </Button>
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    </div>
   );
 };

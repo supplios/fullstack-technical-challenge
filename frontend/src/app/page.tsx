@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TableLocation } from "./table-location";
+import { MyTable, TableLocation } from "./table-location";
 import { carsApi } from "@/api";
 
 interface SearchParams {

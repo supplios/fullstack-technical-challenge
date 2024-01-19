@@ -420,6 +420,52 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {Array<number>} ids An array of IDs
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCarsByIds: async (ids: Array<number>, perPage?: number, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'ids' is not null or undefined
+            assertParamExists('findCarsByIds', 'ids', ids)
+            const localVarPath = `/api/cars/details`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (ids) {
+                localVarQueryParameter['ids'] = ids;
+            }
+
+            if (perPage !== undefined) {
+                localVarQueryParameter['perPage'] = perPage;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {number} [perPage] Number of results in each page or request
          * @param {number} [page] Number of the page
          * @param {*} [options] Override http request option.
@@ -542,6 +588,20 @@ export const CarsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {Array<number>} ids An array of IDs
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findCarsByIds(ids: Array<number>, perPage?: number, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CarPaginationResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findCarsByIds(ids, perPage, page, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['CarsApi.findCarsByIds']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
          * @param {number} [perPage] Number of results in each page or request
          * @param {number} [page] Number of the page
          * @param {*} [options] Override http request option.
@@ -602,6 +662,17 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {Array<number>} ids An array of IDs
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCarsByIds(ids: Array<number>, perPage?: number, page?: number, options?: any): AxiosPromise<CarPaginationResult> {
+            return localVarFp.findCarsByIds(ids, perPage, page, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @param {number} [perPage] Number of results in each page or request
          * @param {number} [page] Number of the page
          * @param {*} [options] Override http request option.
@@ -656,6 +727,19 @@ export class CarsApi extends BaseAPI {
      */
     public findCars(priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options?: RawAxiosRequestConfig) {
         return CarsApiFp(this.configuration).findCars(priceFrom, priceTo, colors, brands, perPage, page, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {Array<number>} ids An array of IDs
+     * @param {number} [perPage] Number of results in each page or request
+     * @param {number} [page] Number of the page
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CarsApi
+     */
+    public findCarsByIds(ids: Array<number>, perPage?: number, page?: number, options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).findCarsByIds(ids, perPage, page, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

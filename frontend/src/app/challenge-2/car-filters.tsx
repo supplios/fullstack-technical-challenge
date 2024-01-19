@@ -27,6 +27,7 @@ export const CarFilters: FC<CarFiltersProps> = memo(({ label, items }) => {
     params.delete("page");
 
     if (items && Array.isArray(items)) {
+      // Iterate over the array and append each item to the params
       items.forEach((item) => {
         params.append(label, item.value.toString());
       });
@@ -34,6 +35,7 @@ export const CarFilters: FC<CarFiltersProps> = memo(({ label, items }) => {
 
     params.append("page", "1");
 
+    // Replace the URL with the new query parameters
     replace(`${pathname}?${params.toString()}`);
   };
 

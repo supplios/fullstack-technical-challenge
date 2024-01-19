@@ -47,10 +47,6 @@ export default async function App({
 }) {
   const { colors, priceFrom, priceTo, brands, perPage, page } = searchParams;
 
-  // const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-  //   new Set(INITIAL_VISIBLE_COLUMNS)
-  // );
-
   const pages = 10;
   const data = await getData();
 
@@ -62,16 +58,6 @@ export default async function App({
     perPage,
     page,
   });
-
-  // const hasSearchFilter = Boolean(filterValue);
-
-  // const headerColumns = React.useMemo(() => {
-  //   if (visibleColumns === "all") return columns;
-
-  //   return columns.filter((column) =>
-  //     Array.from(visibleColumns).includes(column.uid)
-  //   );
-  // }, [visibleColumns]);
 
   return <MyTable filterOptions={data} cars={carPaginatedResult || {}} />;
 }

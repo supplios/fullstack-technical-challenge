@@ -16,6 +16,7 @@ import { CarFilters } from "./car-filters";
 import { capitalize } from "@/utils";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { CarFilterPrice } from "./car-filters -price";
+import { ChangeEvent } from "react";
 
 interface MyTableProps {
   filterOptions: CarFiltersOptionsDto;
@@ -23,13 +24,13 @@ interface MyTableProps {
 }
 
 export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = useState(1);
   const searchParams = useSearchParams();
   const { replace } = useRouter();
   const pathname = usePathname();
 
   const onRowsPerPageChange = useCallback(
-    (e: React.ChangeEvent<HTMLSelectElement>) => {
+    (e: ChangeEvent<HTMLSelectElement>) => {
       setPage(1);
       const params = new URLSearchParams(searchParams);
 
@@ -43,12 +44,10 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
     const page = searchParams.get("page");
     const currentPage = page != null && page != "" ? parseInt(page, 10) : 1;
     setPage(currentPage);
-    console.log("use effect", currentPage);
   }, [searchParams]);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
-      console.log("handleClick");
       const params = new URLSearchParams(searchParams);
       params.set("page", newPage.toString());
       replace(`${pathname}?${params.toString()}`);
@@ -61,13 +60,16 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
       <div className="flex flex-col gap-3">
         <div className="flex justify-between gap-16">
           <div className="">
-            <CarFilters label="brands" items={filterOptions.brands} />
+            <CarFilters label="brands" items={filterOptions.brands || []} />
           </div>
           <div className="">
-            <CarFilters label="colors" items={filterOptions.colors} />
+            <CarFilters label="colors" items={filterOptions.colors || []} />
           </div>
           <div className="">
-            <CarFilterPrice label="priceFrom" items={filterOptions.prices} />
+            <CarFilterPrice
+              label="priceFrom"
+              items={filterOptions.prices || []}
+            />
           </div>
           <div className="">
             <CarFilterPrice label="priceTo" items={filterOptions.prices} />
@@ -75,7 +77,7 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
         </div>
         <div className="flex flex-wrap -mb-4 -mx-2 justify-around">
           <span className="text-default-400 text-small">
-            Total {cars.total} cars
+            Total <span className="font-bold">{cars.total}</span> cars
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -140,6 +142,9 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
       topContent={topContent}
       bottomContent={bottomContent}
       topContentPlacement="outside"
+      classNames={{
+        wrapper: "max-h-[20px]",
+      }}
     >
       <TableHeader>
         <TableColumn>ID</TableColumn>

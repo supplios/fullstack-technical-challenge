@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import styled from "styled-components";
 import "./globals.css";
 import Link from "next/link";
 import ViewSidebarSharpIcon from "@mui/icons-material/ViewSidebarSharp";
@@ -10,50 +9,48 @@ import Filter3SharpIcon from "@mui/icons-material/Filter3Sharp";
 import { useState } from "react";
 import { Providers } from "./providers";
 
-const Container = styled.div`
-  display: flex;
-  height: 100vh;
-`;
+// const Container = styled.div`
+//   display: flex;
+//   height: 100vh;
+// `;
 
-const Navigation = styled.div<{ isOpen: boolean }>`
-  border-right: 1px solid #e0e0e0;
-  /* width: ${({ isOpen }) => (isOpen ? 145 : 0)}px; */
-  width: 145px;
-  transition: width 0.3s ease;
-  overflow: hidden;
-  user-select: none;
+// const Navigation = styled.div<{ isOpen: boolean }>`
+//   border-right: 1px solid #e0e0e0;
+//   /* width: ${({ isOpen }) => (isOpen ? 145 : 0)}px; */
+//   width: 145px;
+//   transition: width 0.3s ease;
+//   overflow: hidden;
+//   user-select: none;
 
-  a {
-    display: flex;
-    line-height: 60px;
-    padding: 0 15px;
-    align-items: center;
-    flex-wrap: nowrap;
+//   a {
+//     /* display: flex; */
+//     /* line-height: 60px;
+//     padding: 0 15px;
+//     align-items: center;
+//     flex-wrap: nowrap; */
 
-    &:hover {
-      cursor: pointer;
-    }
+//     &:hover {
+//       cursor: pointer;
+//     }
 
-    svg {
-      margin-right: 12px;
-    }
+//     svg {
+//       margin-right: 12px;
+//     }
 
-    span {
-      white-space: nowrap;
-    }
-  }
-`;
+//     span {
+//       white-space: nowrap;
+//     }
+//   }
+// `;
 
-const TopNavBar = styled.div`
-  padding: 22px 0;
-  border-bottom: 1px solid #e0e0e0;
-`;
+// const TopNavBar = styled.div`
+/* padding: 22px 0;
+  border-bottom: 1px solid #e0e0e0; */
+// `;
 
-const PageContainer = styled.div`
-  flex: 1;
-`;
-
-const ListItem = styled.li``;
+// const PageContainer = styled.div`
+//   /* flex: 1; */
+// `;
 
 export default function RootLayout({
   children,
@@ -66,41 +63,41 @@ export default function RootLayout({
     <html lang="en" className="light">
       <body>
         <Providers>
-          <Container>
-            <Navigation>
+          {/* <Container> */}
+          {/* <Navigation>
               <ul>
-                <ListItem>
+                <li>
                   <Link href="/">
                     <Filter1SharpIcon />
                     <span>Challenge 1</span>
                   </Link>
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                   <Link href="/challenge-2">
                     <Filter2SharpIcon />
                     <span>Challenge 2</span>
                   </Link>
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                   <Link href="/challenge-3">
                     <Filter3SharpIcon />
                     <span> Challenge 3</span>
                   </Link>
-                </ListItem>
+                </li>
               </ul>
-            </Navigation>
-            <PageContainer className="mx-3.5 px-3.5">
-              <TopNavBar>
-                <div>
-                  <ViewSidebarSharpIcon
-                    color="primary"
-                    onClick={() => setIsNavOpen((prevState) => !prevState)}
-                  />
-                </div>
-              </TopNavBar>
-              {children}
-            </PageContainer>
-          </Container>
+            </Navigation> */}
+          {/* <PageContainer className="mx-3.5 px-3.5">
+            <TopNavBar>
+              <div>
+                <ViewSidebarSharpIcon
+                  color="primary"
+                  onClick={() => setIsNavOpen((prevState) => !prevState)}
+                />
+              </div>
+            </TopNavBar> */}
+          <div className="mx-8">{children}</div>
+          {/* </PageContainer> */}
+          {/* </Container> */}
         </Providers>
       </body>
     </html>
