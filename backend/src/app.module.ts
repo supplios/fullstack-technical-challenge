@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { CarsService } from './cars/cars.service';
+import { CarsModule } from './cars/cars.module';
 import { CarsController } from './cars/cars.controller';
 import { CarsFiltersService } from './cars/cars.filters.service';
 import { GetCarsFiltersController } from './cars/cars-filters.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { CarEntity } from './cars/cars.entity';
-import { CarsModule } from './cars/cars.module';
 
 @Module({
   imports: [
