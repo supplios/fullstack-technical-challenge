@@ -3,30 +3,39 @@ import React from "react";
 import { MyTable } from "./table";
 import { carsApi } from "@/api";
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "role", "status", "actions"];
+interface SearchParams {
+  colors?: string[];
+  priceFrom?: number;
+  priceTo?: number;
+  brands?: string[];
+  perPage?: number;
+  page: number;
+}
 
 async function getData() {
   try {
     const res = await carsApi.getCarsFilters(true, true, true);
     return res.data;
   } catch (err) {
+    console.log(err.response.data.message);
     throw new Error("Failed to fetch data");
   }
 }
 
-async function getResult(searchParams: {
-  price: string;
-  color: string;
-  brand: string;
-}) {
+async function getResult(searchParams: SearchParams) {
   try {
     const res = await carsApi.findCars(
-      Number(searchParams.price),
-      searchParams.color,
-      searchParams.brand
+      Number(searchParams.priceFrom) || undefined,
+      Number(searchParams.priceTo) || undefined,
+      searchParams.colors,
+      searchParams.brands,
+      Number(searchParams.perPage) || undefined,
+      Number(searchParams.page) || 1
     );
     return res.data;
   } catch (err) {
+    console.log(err.response.data.message);
+
     throw new Error("Failed to fetch data");
   }
 }
@@ -34,15 +43,9 @@ async function getResult(searchParams: {
 export default async function App({
   searchParams,
 }: {
-  searchParams: {
-    price: string;
-    color: string;
-    brand: string;
-  };
+  searchParams: SearchParams;
 }) {
-  const color = searchParams?.color;
-  const price = searchParams?.price;
-  const brand = searchParams?.brand;
+  const { colors, priceFrom, priceTo, brands, perPage, page } = searchParams;
 
   // const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
   //   new Set(INITIAL_VISIBLE_COLUMNS)
@@ -51,7 +54,14 @@ export default async function App({
   const pages = 10;
   const data = await getData();
 
-  const cars = await getResult({ price, color, brand });
+  const carPaginatedResult = await getResult({
+    priceFrom,
+    priceTo,
+    colors,
+    brands,
+    perPage,
+    page,
+  });
 
   // const hasSearchFilter = Boolean(filterValue);
 
@@ -63,5 +73,5 @@ export default async function App({
   //   );
   // }, [visibleColumns]);
 
-  return <MyTable filterOptions={data} cars={cars || []} />;
+  return <MyTable filterOptions={data} cars={carPaginatedResult || {}} />;
 }

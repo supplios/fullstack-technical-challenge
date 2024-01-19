@@ -89,7 +89,7 @@ export default function RootLayout({
                 </ListItem>
               </ul>
             </Navigation>
-            <PageContainer>
+            <PageContainer className="mx-3.5 px-3.5">
               <TopNavBar>
                 <div>
                   <ViewSidebarSharpIcon

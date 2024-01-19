@@ -16,7 +16,9 @@
     "concurrently": "^8.2.2",
     "eslint": "^8.47.0",
     "prettier": "^3.0.2",
-    "tsconfig": "*"
+    "tsconfig": "*",
+    "papaparse":  "^5.4.0",
+    "axios":"*"
   },
   "scripts": {
     "build": "turbo run build:all",

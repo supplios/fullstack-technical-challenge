@@ -6,7 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Select, { SingleValue } from "react-select";
 
 interface CarFiltersProps {
-  label: "brand" | "price" | "color";
+  label: "brands" | "priceFrom" | "priceTo" | "colors";
   items:
     | CarFiltersOptionsDto["brands"]
     | CarFiltersOptionsDto["prices"]
@@ -19,11 +19,21 @@ export const CarFilters: FC<CarFiltersProps> = memo(({ label, items }) => {
   const pathname = usePathname();
 
   const handleSelectionChange = (
-    item: SingleValue<{ value: string | number; label: string | number }>
+    items: SingleValue<{ value: string | number; label: string | number }[]>
   ) => {
     const params = new URLSearchParams(searchParams);
 
-    params.set(label, item?.value.toString() || "");
+    params.delete(label);
+    params.delete("page");
+
+    if (items && Array.isArray(items)) {
+      items.forEach((item) => {
+        params.append(label, item.value.toString());
+      });
+    }
+
+    params.append("page", "1");
+
     replace(`${pathname}?${params.toString()}`);
   };
 
@@ -31,34 +41,16 @@ export const CarFilters: FC<CarFiltersProps> = memo(({ label, items }) => {
     <Select
       height={90}
       itemCount={items.length}
-      itemSize={80}
+      itemSize={5}
       initialScrollOffset={0}
       options={items.map((item) => ({
         value: item,
         label: typeof item === "number" ? item : capitalize(item.toString()),
       }))}
+      isMulti={true}
       onChange={handleSelectionChange}
     ></Select>
   );
-
-  // return (
-  //   <Select
-  //     scrollRef={scrollerRef}
-  //     label={`${capitalize(label)}:`}
-  //     labelPlacement="outside"
-  //     placeholder={`Select a ${label}`}
-  //     className="max-w-xs"
-  //     onChange={(e) => handleSelectionChange(e)}
-  //     isLoading={isLoading}
-  //     onOpenChange={setIsOpen}
-  //   >
-  //     {items2.map((item, index) => (
-  //       <SelectItem key={item} value={item} textValue={item.toString()}>
-  //         {capitalize(item.toString())}
-  //       </SelectItem>
-  //     ))}
-  //   </Select>
-  // );
 });
 
 CarFilters.displayName = "CarFilters";

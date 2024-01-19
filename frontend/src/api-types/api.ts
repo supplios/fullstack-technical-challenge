@@ -26,6 +26,91 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CarEntity
+ */
+export interface CarEntity {
+    /**
+     * The unique identifier of the car
+     * @type {number}
+     * @memberof CarEntity
+     */
+    'id': number;
+    /**
+     * The price of the car
+     * @type {number}
+     * @memberof CarEntity
+     */
+    'price': number;
+    /**
+     * The brand of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'brand': string;
+    /**
+     * The model of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'model': string;
+    /**
+     * The manufacturing year of the car
+     * @type {number}
+     * @memberof CarEntity
+     */
+    'year': number;
+    /**
+     * The title status of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'title_status': string;
+    /**
+     * The mileage of the car
+     * @type {number}
+     * @memberof CarEntity
+     */
+    'mileage': number;
+    /**
+     * The color of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'color': string;
+    /**
+     * The VIN (Vehicle Identification Number) of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'vin': string;
+    /**
+     * The lot number of the car
+     * @type {number}
+     * @memberof CarEntity
+     */
+    'lot': number;
+    /**
+     * The state where the car is located
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'state': string;
+    /**
+     * The country where the car is located
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'country': string;
+    /**
+     * The condition of the car
+     * @type {string}
+     * @memberof CarEntity
+     */
+    'condition': string;
+}
+/**
+ * 
+ * @export
  * @interface CarFiltersOptionsDto
  */
 export interface CarFiltersOptionsDto {
@@ -51,85 +136,116 @@ export interface CarFiltersOptionsDto {
 /**
  * 
  * @export
- * @interface CarsDto
+ * @interface CarPaginationResult
  */
-export interface CarsDto {
+export interface CarPaginationResult {
     /**
-     * The unique identifier of the car
-     * @type {number}
-     * @memberof CarsDto
+     * Array of car entities
+     * @type {Array<CarEntity>}
+     * @memberof CarPaginationResult
      */
-    'id': number;
+    'data': Array<CarEntity>;
+    /**
+     * Total number of items
+     * @type {number}
+     * @memberof CarPaginationResult
+     */
+    'total': number;
+    /**
+     * Total number of pages
+     * @type {number}
+     * @memberof CarPaginationResult
+     */
+    'totalPages': number;
+    /**
+     * Current page number
+     * @type {number}
+     * @memberof CarPaginationResult
+     */
+    'page': number;
+    /**
+     * Number of items per page
+     * @type {number}
+     * @memberof CarPaginationResult
+     */
+    'perPage': number;
+}
+/**
+ * 
+ * @export
+ * @interface CreateCarDto
+ */
+export interface CreateCarDto {
     /**
      * The price of the car
      * @type {number}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'price': number;
     /**
      * The brand of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'brand': string;
     /**
      * The model of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'model': string;
     /**
      * The manufacturing year of the car
      * @type {number}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'year': number;
     /**
      * The title status of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'title_status': string;
     /**
      * The mileage of the car
      * @type {number}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'mileage': number;
     /**
      * The color of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'color': string;
     /**
      * The VIN (Vehicle Identification Number) of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'vin': string;
     /**
      * The lot number of the car
      * @type {number}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'lot': number;
     /**
      * The state where the car is located
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'state': string;
     /**
      * The country where the car is located
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'country': string;
     /**
      * The condition of the car
      * @type {string}
-     * @memberof CarsDto
+     * @memberof CreateCarDto
      */
     'condition': string;
 }
@@ -142,13 +258,51 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @param {number} [price] The price of the car
-         * @param {string} [color] The color of the car
-         * @param {string} [brand] The brand of the car
+         * @param {CreateCarDto} createCarDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findCars: async (price?: number, color?: string, brand?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createCar: async (createCarDto: CreateCarDto, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createCarDto' is not null or undefined
+            assertParamExists('createCar', 'createCarDto', createCarDto)
+            const localVarPath = `/api/cars`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createCarDto, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {number} [priceFrom] The minimum price of the car for the filter range
+         * @param {number} [priceTo] The maximum price of the car for the filter range
+         * @param {Array<string>} [colors] Filter by multiple car colors, pass each color as a separate query parameter, like &#x60;colors&#x3D;red&amp;colors&#x3D;blue&#x60;
+         * @param {Array<string>} [brands] Filter by multiple car brands, pass each brand as a separate query parameter, like &#x60;brands&#x3D;toyota&amp;brands&#x3D;ford&#x60;
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCars: async (priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/cars`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -161,16 +315,28 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (price !== undefined) {
-                localVarQueryParameter['price'] = price;
+            if (priceFrom !== undefined) {
+                localVarQueryParameter['priceFrom'] = priceFrom;
             }
 
-            if (color !== undefined) {
-                localVarQueryParameter['color'] = color;
+            if (priceTo !== undefined) {
+                localVarQueryParameter['priceTo'] = priceTo;
             }
 
-            if (brand !== undefined) {
-                localVarQueryParameter['brand'] = brand;
+            if (colors) {
+                localVarQueryParameter['colors'] = colors;
+            }
+
+            if (brands) {
+                localVarQueryParameter['brands'] = brands;
+            }
+
+            if (perPage !== undefined) {
+                localVarQueryParameter['perPage'] = perPage;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
             }
 
 
@@ -240,14 +406,29 @@ export const CarsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {number} [price] The price of the car
-         * @param {string} [color] The color of the car
-         * @param {string} [brand] The brand of the car
+         * @param {CreateCarDto} createCarDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async findCars(price?: number, color?: string, brand?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CarsDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.findCars(price, color, brand, options);
+        async createCar(createCarDto: CreateCarDto, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CarEntity>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createCar(createCarDto, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['CarsApi.createCar']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
+        /**
+         * 
+         * @param {number} [priceFrom] The minimum price of the car for the filter range
+         * @param {number} [priceTo] The maximum price of the car for the filter range
+         * @param {Array<string>} [colors] Filter by multiple car colors, pass each color as a separate query parameter, like &#x60;colors&#x3D;red&amp;colors&#x3D;blue&#x60;
+         * @param {Array<string>} [brands] Filter by multiple car brands, pass each brand as a separate query parameter, like &#x60;brands&#x3D;toyota&amp;brands&#x3D;ford&#x60;
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async findCars(priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CarPaginationResult>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.findCars(priceFrom, priceTo, colors, brands, perPage, page, options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['CarsApi.findCars']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -278,14 +459,26 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @param {number} [price] The price of the car
-         * @param {string} [color] The color of the car
-         * @param {string} [brand] The brand of the car
+         * @param {CreateCarDto} createCarDto 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        findCars(price?: number, color?: string, brand?: string, options?: any): AxiosPromise<Array<CarsDto>> {
-            return localVarFp.findCars(price, color, brand, options).then((request) => request(axios, basePath));
+        createCar(createCarDto: CreateCarDto, options?: any): AxiosPromise<CarEntity> {
+            return localVarFp.createCar(createCarDto, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {number} [priceFrom] The minimum price of the car for the filter range
+         * @param {number} [priceTo] The maximum price of the car for the filter range
+         * @param {Array<string>} [colors] Filter by multiple car colors, pass each color as a separate query parameter, like &#x60;colors&#x3D;red&amp;colors&#x3D;blue&#x60;
+         * @param {Array<string>} [brands] Filter by multiple car brands, pass each brand as a separate query parameter, like &#x60;brands&#x3D;toyota&amp;brands&#x3D;ford&#x60;
+         * @param {number} [perPage] Number of results in each page or request
+         * @param {number} [page] Number of the page
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        findCars(priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options?: any): AxiosPromise<CarPaginationResult> {
+            return localVarFp.findCars(priceFrom, priceTo, colors, brands, perPage, page, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -310,15 +503,29 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
 export class CarsApi extends BaseAPI {
     /**
      * 
-     * @param {number} [price] The price of the car
-     * @param {string} [color] The color of the car
-     * @param {string} [brand] The brand of the car
+     * @param {CreateCarDto} createCarDto 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CarsApi
      */
-    public findCars(price?: number, color?: string, brand?: string, options?: RawAxiosRequestConfig) {
-        return CarsApiFp(this.configuration).findCars(price, color, brand, options).then((request) => request(this.axios, this.basePath));
+    public createCar(createCarDto: CreateCarDto, options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).createCar(createCarDto, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {number} [priceFrom] The minimum price of the car for the filter range
+     * @param {number} [priceTo] The maximum price of the car for the filter range
+     * @param {Array<string>} [colors] Filter by multiple car colors, pass each color as a separate query parameter, like &#x60;colors&#x3D;red&amp;colors&#x3D;blue&#x60;
+     * @param {Array<string>} [brands] Filter by multiple car brands, pass each brand as a separate query parameter, like &#x60;brands&#x3D;toyota&amp;brands&#x3D;ford&#x60;
+     * @param {number} [perPage] Number of results in each page or request
+     * @param {number} [page] Number of the page
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CarsApi
+     */
+    public findCars(priceFrom?: number, priceTo?: number, colors?: Array<string>, brands?: Array<string>, perPage?: number, page?: number, options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).findCars(priceFrom, priceTo, colors, brands, perPage, page, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
