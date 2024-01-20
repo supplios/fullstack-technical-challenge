@@ -505,14 +505,11 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @param {boolean} [isPrice] 
-         * @param {boolean} [isColor] 
-         * @param {boolean} [isBrand] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCarsFilters: async (isPrice?: boolean, isColor?: boolean, isBrand?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/cars/filters`;
+        getCarsFilters: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/cars/filter-options`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -523,18 +520,6 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            if (isPrice !== undefined) {
-                localVarQueryParameter['isPrice'] = isPrice;
-            }
-
-            if (isColor !== undefined) {
-                localVarQueryParameter['isColor'] = isColor;
-            }
-
-            if (isBrand !== undefined) {
-                localVarQueryParameter['isBrand'] = isBrand;
-            }
 
 
     
@@ -615,14 +600,11 @@ export const CarsApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {boolean} [isPrice] 
-         * @param {boolean} [isColor] 
-         * @param {boolean} [isBrand] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCarsFilters(isPrice?: boolean, isColor?: boolean, isBrand?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CarFiltersOptionsDto>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getCarsFilters(isPrice, isColor, isBrand, options);
+        async getCarsFilters(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CarFiltersOptionsDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getCarsFilters(options);
             const index = configuration?.serverIndex ?? 0;
             const operationBasePath = operationServerMap['CarsApi.getCarsFilters']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
@@ -683,14 +665,11 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @param {boolean} [isPrice] 
-         * @param {boolean} [isColor] 
-         * @param {boolean} [isBrand] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCarsFilters(isPrice?: boolean, isColor?: boolean, isBrand?: boolean, options?: any): AxiosPromise<Array<CarFiltersOptionsDto>> {
-            return localVarFp.getCarsFilters(isPrice, isColor, isBrand, options).then((request) => request(axios, basePath));
+        getCarsFilters(options?: any): AxiosPromise<Array<CarFiltersOptionsDto>> {
+            return localVarFp.getCarsFilters(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -756,15 +735,12 @@ export class CarsApi extends BaseAPI {
 
     /**
      * 
-     * @param {boolean} [isPrice] 
-     * @param {boolean} [isColor] 
-     * @param {boolean} [isBrand] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CarsApi
      */
-    public getCarsFilters(isPrice?: boolean, isColor?: boolean, isBrand?: boolean, options?: RawAxiosRequestConfig) {
-        return CarsApiFp(this.configuration).getCarsFilters(isPrice, isColor, isBrand, options).then((request) => request(this.axios, this.basePath));
+    public getCarsFilters(options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).getCarsFilters(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

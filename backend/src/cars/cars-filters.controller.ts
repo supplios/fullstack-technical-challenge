@@ -1,26 +1,31 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CarsFiltersService } from './cars.filters.service';
-import {
-  GetCarsFiltersRequestDto,
-  carFiltersOptionsDto,
-} from './cars-filters.dto';
+import { CarFiltersOptionsDto } from './cars-filters.dto';
 
-@Controller('cars/filters')
+@Controller('/cars')
 @ApiTags('Cars')
 export class GetCarsFiltersController {
   constructor(private readonly carsFiltersService: CarsFiltersService) {}
 
-  @Get()
+  @Get('/filter-options')
   @ApiResponse({
     status: 200,
     description: 'Successfully retrieved cars',
-    type: carFiltersOptionsDto,
+    type: CarFiltersOptionsDto,
     isArray: true,
   })
-  async getCarsFilters(
-    @Query() query: GetCarsFiltersRequestDto,
-  ): Promise<carFiltersOptionsDto> {
-    return this.carsFiltersService.get(query);
+  async getCarsFilters(): Promise<CarFiltersOptionsDto> {
+    const [brands, colors, prices] = await Promise.all([
+      this.carsFiltersService.findDistinctBrands(),
+      this.carsFiltersService.findDistinctColors(),
+      this.carsFiltersService.findDistinctPrices(),
+    ]);
+
+    return {
+      brands: brands.map((b) => b.brand),
+      colors: colors.map((b) => b.color),
+      prices: prices.map((b) => b.price),
+    };
   }
 }

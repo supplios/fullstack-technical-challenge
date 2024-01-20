@@ -1,32 +1,48 @@
 import { Injectable } from '@nestjs/common';
-import {
-  GetCarsFiltersRequestDto,
-  carFiltersOptionsDto,
-} from './cars-filters.dto';
+import { CarEntity } from './cars.entity';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class CarsFiltersService {
-  constructor() {}
+  constructor(
+    @InjectRepository(CarEntity)
+    private readonly carRepository: Repository<CarEntity>,
+  ) {}
 
-  async get(params: GetCarsFiltersRequestDto) {
-    console.log('TEMP', params);
-    // const promises: Promise<carFiltersOptionsDto>[] = [];
+  findDistinctBrands(): Promise<
+    {
+      brand: string;
+    }[]
+  > {
+    return this.carRepository
+      .createQueryBuilder('car')
+      .select('DISTINCT(car.brand)', 'brand')
+      .orderBy('brand')
+      .getRawMany();
+  }
 
-    // if (params.price) {
-    //   promises.push();
-    // }
+  findDistinctColors(): Promise<
+    {
+      color: string;
+    }[]
+  > {
+    return this.carRepository
+      .createQueryBuilder('car')
+      .select('DISTINCT(car.color)', 'color')
+      .orderBy('color')
+      .getRawMany();
+  }
 
-    // if (params.brand) {
-    //   promises.push();
-    // }
-
-    // if (params.color) {
-    //   promises.push();
-    // }
-
-    // const [distinctPrices, distinctBrands, distinctColors] =
-    //   await Promise.all(promises);
-
-    return new carFiltersOptionsDto();
+  findDistinctPrices(): Promise<
+    {
+      price: number;
+    }[]
+  > {
+    return this.carRepository
+      .createQueryBuilder('car')
+      .select('DISTINCT(car.price)', 'price')
+      .orderBy('price')
+      .getRawMany();
   }
 }

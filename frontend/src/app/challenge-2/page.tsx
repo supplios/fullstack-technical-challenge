@@ -14,7 +14,7 @@ interface SearchParams {
 
 async function getData() {
   try {
-    const res = await carsApi.getCarsFilters(true, true, true);
+    const res = await carsApi.getCarsFilters();
     return res.data;
   } catch (err) {
     console.log(err.response.data.message);
