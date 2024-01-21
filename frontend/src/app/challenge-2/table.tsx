@@ -143,7 +143,7 @@ export const MyTable: FC<MyTableProps> = ({ filterOptions, cars }) => {
       bottomContent={bottomContent}
       topContentPlacement="outside"
       classNames={{
-        wrapper: "max-h-[20px]",
+        wrapper: "min-h-[800px]",
       }}
     >
       <TableHeader>

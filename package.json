@@ -8,25 +8,26 @@
   "keywords": [
     "nest",
     "next",
-    "turborepo"
+    "tailwind"
   ],
   "author": "Rasoul Shahriary",
   "packageManager": "npm@9.6.3",
+  "dependencies": {
+    "axios": "^1.6.5",
+    "pnpm":"8.14.1"
+  },
   "devDependencies": {
     "concurrently": "^8.2.2",
-    "eslint": "^8.47.0",
-    "prettier": "^3.0.2",
-    "tsconfig": "*",
-    "papaparse":  "^5.4.0",
-    "axios":"*"
+    "eslint": "^8.56.0",
+    "papaparse": "^5.4.1",
+    "prettier": "^3.2.4",
+    "tsconfig": "^7.0.0"
   },
   "scripts": {
-    "build": "turbo run build:all",
+    "build": "pnpm run build:all",
     "dev": "concurrently -c blue,green pnpm:frontend pnpm:backend",
-    "backend": "cd ./backend && npm run dev",
-    "frontend": "cd ./frontend && npm run dev"
+    "backend": "cd ./backend && pnpm run dev",
+    "frontend": "cd ./frontend && pnpm run dev"
   },
-  "license": "ISC",
-  "dependencies": {
-  }
+  "license": "ISC"
 }

@@ -14,12 +14,12 @@
     "@mui/icons-material": "^5.15.4",
     "@nextui-org/react": "^2.2.9",
     "@nextui-org/use-infinite-scroll": "^2.1.2",
-    "axios": "^1.6.5",
     "framer-motion": "^10.18.0",
     "next": "14.0.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "recharts": "2.10.4"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",

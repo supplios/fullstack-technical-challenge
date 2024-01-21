@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import {
   IsArray,
@@ -56,6 +56,25 @@ export class FindCarsByIdsDto {
   @IsNumber()
   @Min(1)
   readonly page?: number;
+}
+
+export class SummedValueByYearRequestDto {
+  @ApiPropertyOptional({ description: 'Filter by car model' })
+  @IsOptional()
+  @IsString()
+  readonly model?: string;
+
+  @ApiPropertyOptional({ description: 'Minimum mileage for filter' })
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  readonly mileageMin?: number;
+
+  @ApiPropertyOptional({ description: 'Maximum mileage for filter' })
+  @IsOptional()
+  @IsNumber()
+  @Transform(({ value }) => parseInt(value))
+  readonly mileageMax?: number;
 }
 
 export class FindCarsDto {
@@ -264,4 +283,25 @@ export class CarGroupedByLocationResult extends PaginationResult<CarGroupedByLoc
     description: 'Array of cars grouped by location',
   })
   data: CarGroupedByLocationDto[];
+}
+
+export class CarAnnualSummaryDto {
+  @ApiProperty({
+    example: 2000,
+    description: 'The year of the car summary',
+  })
+  year: number;
+
+  @ApiProperty({
+    type: [Number],
+    description: 'Array of car IDs',
+    example: [189, 286, 392, 422],
+  })
+  ids: number[];
+
+  @ApiProperty({
+    example: 175,
+    description: 'Total value for the year',
+  })
+  total: number;
 }

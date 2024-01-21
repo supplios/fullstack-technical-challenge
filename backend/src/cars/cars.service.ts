@@ -10,11 +10,13 @@ import {
 } from 'typeorm';
 import { CarEntity } from './cars.entity';
 import {
+  CarAnnualSummaryDto,
   CarGroupedByLocationDto,
   CreateCarDto,
   FindCarsByIdsDto,
   FindCarsDto,
   FindCarsGroupedByLocationDto,
+  SummedValueByYearRequestDto,
 } from './cars.dto';
 import { PaginationResult } from 'src/common/pagination.dto';
 
@@ -46,8 +48,6 @@ export class CarsService {
       take: perPage,
       skip: offset,
     });
-
-    console.log(data);
 
     return new PaginationResult<CarEntity>(data, total, page, perPage);
   }
@@ -127,5 +127,31 @@ export class CarsService {
       page,
       perPage,
     );
+  }
+
+  async getSummedValueByYear(
+    dto: SummedValueByYearRequestDto,
+  ): Promise<CarAnnualSummaryDto[]> {
+    const query = this.carRepository
+      .createQueryBuilder('car')
+      .select('car.year', 'year')
+      .addSelect('ARRAY_AGG(car.id)', 'ids')
+      .addSelect('SUM(car.price)', 'total')
+      .groupBy('car.year')
+      .orderBy('car.year');
+
+    if (dto.model) {
+      query.andWhere('car.model = :model', { model: dto.model });
+    }
+    if (dto.mileageMin) {
+      query.andWhere('car.mileage >= :min', { min: dto.mileageMin });
+    }
+    if (dto.mileageMax) {
+      query.andWhere('car.mileage <= :max', { max: dto.mileageMax });
+    }
+
+    const result: CarAnnualSummaryDto[] = await query.getRawMany();
+
+    return result;
   }
 }

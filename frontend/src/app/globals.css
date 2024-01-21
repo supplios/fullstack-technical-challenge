@@ -16,8 +16,8 @@ body {
 }
 
 body {
-  color: black;
-  background: white
+  color: rgb(113 113 122);
+  background:#EBEFF2
 }
 
 a {
@@ -28,6 +28,10 @@ a {
 ul {
   list-style-type: none;
   padding: 0;
+}
+
+svg {
+  fill: rgb(113 113 122);
 }
 
 @media (prefers-color-scheme: dark) {

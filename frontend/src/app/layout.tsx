@@ -1,105 +1,21 @@
-"use client";
-import React from "react";
-import "./globals.css";
-import Link from "next/link";
-import ViewSidebarSharpIcon from "@mui/icons-material/ViewSidebarSharp";
-import Filter1SharpIcon from "@mui/icons-material/Filter1Sharp";
-import Filter2SharpIcon from "@mui/icons-material/Filter2Sharp";
-import Filter3SharpIcon from "@mui/icons-material/Filter3Sharp";
-import { useState } from "react";
-import { Providers } from "./providers";
+import React, { ReactNode } from 'react';
+import './globals.css';
+import { Providers } from './providers';
+import { Sidebar } from '@/components/sidebar';
 
-// const Container = styled.div`
-//   display: flex;
-//   height: 100vh;
-// `;
-
-// const Navigation = styled.div<{ isOpen: boolean }>`
-//   border-right: 1px solid #e0e0e0;
-//   /* width: ${({ isOpen }) => (isOpen ? 145 : 0)}px; */
-//   width: 145px;
-//   transition: width 0.3s ease;
-//   overflow: hidden;
-//   user-select: none;
-
-//   a {
-//     /* display: flex; */
-//     /* line-height: 60px;
-//     padding: 0 15px;
-//     align-items: center;
-//     flex-wrap: nowrap; */
-
-//     &:hover {
-//       cursor: pointer;
-//     }
-
-//     svg {
-//       margin-right: 12px;
-//     }
-
-//     span {
-//       white-space: nowrap;
-//     }
-//   }
-// `;
-
-// const TopNavBar = styled.div`
-/* padding: 22px 0;
-  border-bottom: 1px solid #e0e0e0; */
-// `;
-
-// const PageContainer = styled.div`
-//   /* flex: 1; */
-// `;
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const [isNavOpen, setIsNavOpen] = useState(true); // State to control navigation visibility
-
+export const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <html lang="en" className="light">
+    <html lang="en">
       <body>
         <Providers>
-          {/* <Container> */}
-          {/* <Navigation>
-              <ul>
-                <li>
-                  <Link href="/">
-                    <Filter1SharpIcon />
-                    <span>Challenge 1</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/challenge-2">
-                    <Filter2SharpIcon />
-                    <span>Challenge 2</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/challenge-3">
-                    <Filter3SharpIcon />
-                    <span> Challenge 3</span>
-                  </Link>
-                </li>
-              </ul>
-            </Navigation> */}
-          {/* <PageContainer className="mx-3.5 px-3.5">
-            <TopNavBar>
-              <div>
-                <ViewSidebarSharpIcon
-                  color="primary"
-                  onClick={() => setIsNavOpen((prevState) => !prevState)}
-                />
-              </div>
-            </TopNavBar> */}
-          <div className="mx-8">{children}</div>
-          {/* </PageContainer> */}
-          {/* </Container> */}
+          <div className="flex w-full">
+            <Sidebar />
+            <div className="w-full px-6">{children}</div>
+          </div>
         </Providers>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

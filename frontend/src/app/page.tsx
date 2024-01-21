@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import { MyTable, TableLocation } from "./table-location";
-import { carsApi } from "@/api";
+import { TableLocation } from './table-location';
+import { carsApi } from '@/api';
+import { TopNav } from '@/components/sidebar/header';
 
 interface SearchParams {
   perPage?: number;
@@ -12,21 +13,17 @@ async function getResult(searchParams: SearchParams) {
   try {
     const res = await carsApi.findCarsGroupedByLocation(
       Number(searchParams.perPage) || undefined,
-      Number(searchParams.page) || 1
+      Number(searchParams.page) || 1,
     );
     return res.data;
   } catch (err) {
     console.log(err.response.data.message);
 
-    throw new Error("Failed to fetch data");
+    throw new Error('Failed to fetch data');
   }
 }
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+const Page = async ({ searchParams }: { searchParams: SearchParams }) => {
   const { perPage, page } = searchParams;
 
   const carGroupedByLocationPaginatedResult = await getResult({
@@ -34,5 +31,12 @@ export default async function Page({
     page,
   });
 
-  return <TableLocation cars={carGroupedByLocationPaginatedResult || {}} />;
-}
+  return (
+    <>
+      <TopNav title="Home" />
+      <TableLocation cars={carGroupedByLocationPaginatedResult || {}} />
+    </>
+  );
+};
+
+export default Page;

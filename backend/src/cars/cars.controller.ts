@@ -1,12 +1,14 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { CarsService } from './cars.service';
 import {
+  CarAnnualSummaryDto,
   CarGroupedByLocationResult,
   CarPaginationResult,
   CreateCarDto,
   FindCarsByIdsDto,
   FindCarsDto,
   FindCarsGroupedByLocationDto,
+  SummedValueByYearRequestDto,
 } from './cars.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CarEntity } from './cars.entity';
@@ -48,6 +50,19 @@ export class CarsController {
     @Query() query: FindCarsGroupedByLocationDto,
   ): Promise<CarGroupedByLocationResult> {
     return this.carsService.findAllByGroup(query);
+  }
+
+  @Get('/values/annual-summary')
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully created car',
+    type: CarAnnualSummaryDto,
+    isArray: true,
+  })
+  getSummedValueByYear(
+    @Query() query: SummedValueByYearRequestDto,
+  ): Promise<CarAnnualSummaryDto[]> {
+    return this.carsService.getSummedValueByYear(query);
   }
 
   @Post()

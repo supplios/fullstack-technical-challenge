@@ -1,5 +1,5 @@
-"use client";
-import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
+'use client';
+import React, { FC, useCallback, useEffect, useMemo } from 'react';
 import {
   Pagination,
   Button,
@@ -7,10 +7,10 @@ import {
   CardBody,
   Image,
   CardHeader,
-} from "@nextui-org/react";
-import { CarGroupedByLocationResult } from "@/api-types";
-import { capitalize } from "@/utils";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+  Avatar,
+} from '@nextui-org/react';
+import { CarGroupedByLocationResult } from '@/api-types';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 interface MyTableProps {
   cars: CarGroupedByLocationResult;
@@ -27,26 +27,25 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
       setPage(1);
       const params = new URLSearchParams(searchParams);
 
-      params.set("perPage", e.target?.value.toString() || "");
+      params.set('perPage', e.target?.value.toString() || '');
       replace(`${pathname}?${params.toString()}`);
     },
-    [pathname, replace, searchParams]
+    [pathname, replace, searchParams],
   );
 
   useEffect(() => {
-    const page = searchParams.get("page");
-    const currentPage = page != null && page != "" ? parseInt(page, 10) : 1;
+    const page = searchParams.get('page');
+    const currentPage = page != null && page != '' ? parseInt(page, 10) : 1;
     setPage(currentPage);
-    console.log("use effect", currentPage);
   }, [searchParams]);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
       const params = new URLSearchParams(searchParams);
-      params.set("page", newPage.toString());
+      params.set('page', newPage.toString());
       replace(`${pathname}?${params.toString()}`);
     },
-    [pathname, replace, searchParams]
+    [pathname, replace, searchParams],
   );
 
   const topContent = useMemo(() => {
@@ -73,43 +72,42 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
   }, [cars.total, onRowsPerPageChange]);
 
   return (
-    <div className="flex gap-4 py-2 px-2 flex-col">
-      <div className="flex gap-4 items-center">
+    <div className="flex gap-4 p-6 flex-col bg-white h-[calc(100vh-86px)] rounded">
+      <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-4  items-start">
         {cars.data.map((item, index) => (
           <Card
             shadow="sm"
-            className="py-4"
+            className="py-4 rounded"
             key={item.state}
             isPressable
             onPress={() => {
               const params = new URLSearchParams(searchParams);
-              params.delete("ids");
-
+              params.delete('ids');
               if (Array.isArray(item.ids)) {
                 item.ids.forEach((id) => {
-                  params.append("ids", id.toString());
+                  params.append('ids', id.toString());
                 });
               }
               push(`/cars/details?${params.toString()}`);
             }}
           >
-            <CardHeader className="pb-0 pt-2 px-4 flex-col items-start">
-              <p className="text-tiny uppercase font-bold">{item.state}</p>
-              <small className="text-default-500">{item.country}</small>
-              <h4 className="font-bold text-large">{item.count}</h4>
+            <CardHeader className="pb-0 pt-2 px-4 justify-between items-start">
+              <div className="flex flex-col items-start">
+                <p className="text-tiny uppercase font-bold">{item.state}</p>
+                <small className="text-default-500">{item.country}</small>
+                <h4 className="font-bold text-large">{item.count}</h4>
+              </div>
+              <div className="flex flex-col items-end gap-8">
+                <Avatar src="/assets/flags/US.svg" size="sm" />
+                {/* <Button size="sm" color="primary">
+                  Show Cars
+                </Button> */}
+              </div>
             </CardHeader>
-            <CardBody className="overflow-visible py-2">
-              <Image
-                alt="Card background"
-                className="object-cover rounded-xl"
-                src="/assets/flags/US.svg"
-                width={270}
-              />
-            </CardBody>
           </Card>
         ))}
       </div>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center pt-8">
         <span className="w-[30%] text-small text-default-400"></span>
         <Pagination
           showControls

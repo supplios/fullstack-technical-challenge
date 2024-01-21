@@ -26,6 +26,31 @@ import { BASE_PATH, COLLECTION_FORMATS, BaseAPI, RequiredError, operationServerM
 /**
  * 
  * @export
+ * @interface CarAnnualSummaryDto
+ */
+export interface CarAnnualSummaryDto {
+    /**
+     * The year of the car summary
+     * @type {number}
+     * @memberof CarAnnualSummaryDto
+     */
+    'year': number;
+    /**
+     * Array of car IDs
+     * @type {Array<number>}
+     * @memberof CarAnnualSummaryDto
+     */
+    'ids': Array<number>;
+    /**
+     * Total value for the year
+     * @type {number}
+     * @memberof CarAnnualSummaryDto
+     */
+    'total': number;
+}
+/**
+ * 
+ * @export
  * @interface CarEntity
  */
 export interface CarEntity {
@@ -532,6 +557,50 @@ export const CarsApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} [model] Filter by car model
+         * @param {number} [mileageMin] Minimum mileage for filter
+         * @param {number} [mileageMax] Maximum mileage for filter
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSummedValueByYear: async (model?: string, mileageMin?: number, mileageMax?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/cars/values/annual-summary`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (model !== undefined) {
+                localVarQueryParameter['model'] = model;
+            }
+
+            if (mileageMin !== undefined) {
+                localVarQueryParameter['mileageMin'] = mileageMin;
+            }
+
+            if (mileageMax !== undefined) {
+                localVarQueryParameter['mileageMax'] = mileageMax;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -609,6 +678,20 @@ export const CarsApiFp = function(configuration?: Configuration) {
             const operationBasePath = operationServerMap['CarsApi.getCarsFilters']?.[index]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
         },
+        /**
+         * 
+         * @param {string} [model] Filter by car model
+         * @param {number} [mileageMin] Minimum mileage for filter
+         * @param {number} [mileageMax] Maximum mileage for filter
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSummedValueByYear(model?: string, mileageMin?: number, mileageMax?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CarAnnualSummaryDto>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSummedValueByYear(model, mileageMin, mileageMax, options);
+            const index = configuration?.serverIndex ?? 0;
+            const operationBasePath = operationServerMap['CarsApi.getSummedValueByYear']?.[index]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, operationBasePath || basePath);
+        },
     }
 };
 
@@ -670,6 +753,17 @@ export const CarsApiFactory = function (configuration?: Configuration, basePath?
          */
         getCarsFilters(options?: any): AxiosPromise<Array<CarFiltersOptionsDto>> {
             return localVarFp.getCarsFilters(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [model] Filter by car model
+         * @param {number} [mileageMin] Minimum mileage for filter
+         * @param {number} [mileageMax] Maximum mileage for filter
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSummedValueByYear(model?: string, mileageMin?: number, mileageMax?: number, options?: any): AxiosPromise<Array<CarAnnualSummaryDto>> {
+            return localVarFp.getSummedValueByYear(model, mileageMin, mileageMax, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -741,6 +835,19 @@ export class CarsApi extends BaseAPI {
      */
     public getCarsFilters(options?: RawAxiosRequestConfig) {
         return CarsApiFp(this.configuration).getCarsFilters(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [model] Filter by car model
+     * @param {number} [mileageMin] Minimum mileage for filter
+     * @param {number} [mileageMax] Maximum mileage for filter
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CarsApi
+     */
+    public getSummedValueByYear(model?: string, mileageMin?: number, mileageMax?: number, options?: RawAxiosRequestConfig) {
+        return CarsApiFp(this.configuration).getSummedValueByYear(model, mileageMin, mileageMax, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
