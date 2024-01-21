@@ -1,12 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CarsFiltersService } from './cars.filters.service';
-import { CarFiltersOptionsDto } from './cars-filters.dto';
+import { CarFiltersOptionsDto } from '../models/car-filters.dto';
+import { CarFiltersService } from '../services/car.filters.service';
 
 @Controller('/cars')
 @ApiTags('Cars')
-export class GetCarsFiltersController {
-  constructor(private readonly carsFiltersService: CarsFiltersService) {}
+export class GetCarFiltersController {
+  constructor(private readonly carFiltersService: CarFiltersService) {}
 
   @Get('/filter-options')
   @ApiResponse({
@@ -15,11 +15,11 @@ export class GetCarsFiltersController {
     type: CarFiltersOptionsDto,
     isArray: true,
   })
-  async getCarsFilters(): Promise<CarFiltersOptionsDto> {
+  async getCarFilters(): Promise<CarFiltersOptionsDto> {
     const [brands, colors, prices] = await Promise.all([
-      this.carsFiltersService.findDistinctBrands(),
-      this.carsFiltersService.findDistinctColors(),
-      this.carsFiltersService.findDistinctPrices(),
+      this.carFiltersService.findDistinctBrands(),
+      this.carFiltersService.findDistinctColors(),
+      this.carFiltersService.findDistinctPrices(),
     ]);
 
     return {

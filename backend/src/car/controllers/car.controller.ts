@@ -1,5 +1,4 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { CarsService } from './cars.service';
 import {
   CarAnnualSummaryDto,
   CarGroupedByLocationResult,
@@ -9,14 +8,15 @@ import {
   FindCarsDto,
   FindCarsGroupedByLocationDto,
   SummedValueByYearRequestDto,
-} from './cars.dto';
+} from '../models/car.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CarEntity } from './cars.entity';
+import { CarEntity } from '../models/car.entity';
+import { CarService } from '../services/car.service';
 
 @Controller('cars')
 @ApiTags('Cars')
-export class CarsController {
-  constructor(private readonly carsService: CarsService) {}
+export class CarController {
+  constructor(private readonly carsService: CarService) {}
 
   @Get()
   @ApiResponse({

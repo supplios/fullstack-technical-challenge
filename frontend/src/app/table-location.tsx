@@ -72,8 +72,8 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
   }, [cars.total, onRowsPerPageChange]);
 
   return (
-    <div className="flex gap-4 p-6 flex-col bg-white h-[calc(100vh-86px)] rounded">
-      <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-4  items-start">
+    <div className="flex gap-4  p-6 flex-col bg-white h-[calc(100vh-86px)] rounded">
+      <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 items-start">
         {cars.data.map((item, index) => (
           <Card
             shadow="sm"
@@ -83,6 +83,8 @@ export const TableLocation: FC<MyTableProps> = ({ cars }) => {
             onPress={() => {
               const params = new URLSearchParams(searchParams);
               params.delete('ids');
+              params.delete('page');
+
               if (Array.isArray(item.ids)) {
                 item.ids.forEach((id) => {
                   params.append('ids', id.toString());

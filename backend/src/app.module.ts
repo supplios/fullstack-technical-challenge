@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
-import { CarsService } from './cars/cars.service';
-import { CarsModule } from './cars/cars.module';
-import { CarsController } from './cars/cars.controller';
-import { CarsFiltersService } from './cars/cars.filters.service';
-import { GetCarsFiltersController } from './cars/cars-filters.controller';
+import { CarModule } from './car/car.module';
+import { CarController } from './car/controllers/car.controller';
+import { GetCarFiltersController } from './car/controllers/car-filters.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { CarEntity } from './cars/cars.entity';
+import { CarEntity } from './car/models/car.entity';
+import { CarService } from './car/services/car.service';
+import { CarFiltersService } from './car/services/car.filters.service';
 
 @Module({
   imports: [
-    CarsModule,
+    CarModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),
@@ -30,7 +30,7 @@ import { CarEntity } from './cars/cars.entity';
     }),
     TypeOrmModule.forFeature([CarEntity]),
   ],
-  controllers: [CarsController, GetCarsFiltersController],
-  providers: [CarsService, CarsFiltersService, ConfigService],
+  controllers: [CarController, GetCarFiltersController],
+  providers: [CarService, CarFiltersService, ConfigService],
 })
 export class AppModule {}

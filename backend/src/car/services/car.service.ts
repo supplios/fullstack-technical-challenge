@@ -8,20 +8,20 @@ import {
   MoreThanOrEqual,
   Repository,
 } from 'typeorm';
-import { CarEntity } from './cars.entity';
+import { PaginationResult } from 'src/common/pagination.dto';
+import { CarEntity } from '../models/car.entity';
 import {
+  SummedValueByYearRequestDto,
   CarAnnualSummaryDto,
   CarGroupedByLocationDto,
   CreateCarDto,
   FindCarsByIdsDto,
   FindCarsDto,
   FindCarsGroupedByLocationDto,
-  SummedValueByYearRequestDto,
-} from './cars.dto';
-import { PaginationResult } from 'src/common/pagination.dto';
+} from '../models/car.dto';
 
 @Injectable()
-export class CarsService {
+export class CarService {
   constructor(
     @InjectRepository(CarEntity)
     private readonly carRepository: Repository<CarEntity>,

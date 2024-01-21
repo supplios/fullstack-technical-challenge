@@ -11,7 +11,7 @@ import {
   Min,
 } from 'class-validator';
 import { PaginationResult } from 'src/common/pagination.dto';
-import { CarEntity } from './cars.entity';
+import { CarEntity } from './car.entity';
 
 export class CarPaginationResult extends PaginationResult<CarEntity> {
   @ApiProperty({ type: [CarEntity], description: 'Array of car entities' })
