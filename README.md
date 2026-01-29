@@ -1,6 +1,6 @@
-# Full-Stack Technical Challenge
+# Full-Stack Technical Challenge (2024)
 
-Hey there!
+**NOTE:** This is a technical challenge used in 2024... if you are applying to work with us in 2025/2026, look for a different repo!
 
 Welcome to the Supplios Full-Stack technical challenge! In the repository, you'll find a file called `cars_datasets.csv` with info about used cars in the US. Your task is to work with this data and tackle three challenges to build a web application.
 
